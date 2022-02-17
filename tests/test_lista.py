@@ -1,13 +1,13 @@
 from pytorch_lightning import Trainer, seed_everything
-from project.lit_mnist import LitClassifier
-from project.datasets.mnist import mnist
+from project.lista_model import LISTA
+from project.qpi_data_model import QPIDataModule
 
 
-def test_lit_classifier():
+def test_lista():
     seed_everything(1234)
 
-    model = LitClassifier()
-    train, val, test = mnist()
+    model = LISTA()
+    data_module = QPIDataModule()
     trainer = Trainer(limit_train_batches=50, limit_val_batches=20, max_epochs=2)
     trainer.fit(model, train, val)
 

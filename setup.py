@@ -3,13 +3,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='project',
+    name='Sparse Blind Deconvolution of density of states maps',
     version='0.0.0',
-    description='Describe Your Cool Project',
-    author='',
-    author_email='',
-    # REPLACE WITH YOUR OWN GITHUB PROJECT LINK
-    url='https://github.com/PyTorchLightning/pytorch-lightning-conference-seed',
+    description='Takes a density of states map that contains quasi-particle interference (QPI)'
+                ' patterns and returns the defect map and the single-defect QPI',
+    author='Dror Harush',
+    author_email='drorharush@gmail.com',
+    url='https://github.com/Drorharush/SparseBlindDeconv',
     install_requires=['pytorch-lightning'],
     packages=find_packages(),
 )
