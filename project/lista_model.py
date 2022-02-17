@@ -33,7 +33,7 @@ class LISTA(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         eval_dict = self._shared_pred_eval(batch)
-        self.log('non-zero diff (%)', round(100 * eval_dict['non zero diff'], 0), logger=False, prog_bar=True)
+        self.log('non-zero diff (%)', 100 * eval_dict['non zero diff'], logger=False, prog_bar=True)
         return eval_dict
 
     def validation_step(self, batch, batch_idx):
@@ -43,10 +43,10 @@ class LISTA(pl.LightningModule):
         measurement, kernel, activation = batch
         pred_activation = self(measurement)
         loss = self.loss_function(pred_activation, activation, kernel)
-        pred_non_zero = torch.count_nonzero(pred_activation, dim=(-2, -1))
+        pred_non_zero = torch.count_nonzero(pred_activation.squeeze(dim=1), dim=(-2, -1))
         target_non_zero = torch.count_nonzero(activation, dim=(-2, -1))
-        non_zero_diff = pred_non_zero - target_non_zero
-        return {'loss': loss, 'non zero diff': non_zero_diff / target_non_zero}
+        non_zero_diff = ((pred_non_zero - target_non_zero) / target_non_zero).median()
+        return {'loss': loss, 'non zero diff': non_zero_diff}
 
     def training_epoch_end(self, outputs) -> None:
         self._shared_logging(outputs, 'Training')

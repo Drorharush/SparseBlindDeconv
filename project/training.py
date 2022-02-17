@@ -49,7 +49,7 @@ def cli_main():
         auto_lr_find=True,
         accelerator='auto',
         auto_select_gpus=True,
-        max_epochs=30,
+        max_epochs=3000,
         logger=logger,
         gpus=-1,
         num_nodes=-1,
