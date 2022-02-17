@@ -38,8 +38,8 @@ def cli_main():
     early_stop_callback = EarlyStopping(
         monitor="Validation loss",
         stopping_threshold=1,
-        min_delta=0.0001,
-        patience=3,
+        min_delta=0,
+        patience=5,
         verbose=False,
         mode="min",
         check_on_train_epoch_end=False
