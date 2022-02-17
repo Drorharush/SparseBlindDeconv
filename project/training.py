@@ -36,12 +36,12 @@ def cli_main():
 
     # Stopping conditions:
     early_stop_callback = EarlyStopping(
-        monitor="Validation accuracy",
+        monitor="Validation loss",
         stopping_threshold=1,
         min_delta=0.0001,
         patience=3,
         verbose=False,
-        mode="max",
+        mode="min",
         check_on_train_epoch_end=False
     )
 

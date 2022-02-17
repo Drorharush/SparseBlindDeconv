@@ -111,6 +111,7 @@ def sphere_norm_by_layer(M: np.ndarray) -> np.ndarray:
 
 
 def save_data(number_of_samples, measurement_size, kernel_size, SNR=2, training=False, validation=False, testing=False):
+    # TODO have it check if there's already data
     files_in_folder = os.listdir()
     if training and 'training_dataset' not in files_in_folder:
         os.system("mkdir training_dataset")
