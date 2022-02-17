@@ -32,15 +32,14 @@ class LISTA(pl.LightningModule):
         return x
 
     def training_step(self, batch, batch_idx):
-        measurement, kernel, activation = batch
-        pred_activation = self(measurement)
-        loss = self.loss_function(pred_activation, activation, kernel)
-        pred_non_zero = torch.count_nonzero(pred_activation, dim=(-2, -1))
-        target_non_zero = torch.count_nonzero(activation, dim=(-2, -1))
-        non_zero_diff = pred_non_zero - target_non_zero
-        return {'loss': loss, 'non zero diff': non_zero_diff / target_non_zero}
+        eval_dict = self._shared_pred_eval(batch)
+        self.log('non-zero diff (%)', round(100 * eval_dict['non zero diff'], 0), logger=False, prog_bar=True)
+        return eval_dict
 
     def validation_step(self, batch, batch_idx):
+        return self._shared_pred_eval(batch)
+
+    def _shared_pred_eval(self, batch) -> dict:
         measurement, kernel, activation = batch
         pred_activation = self(measurement)
         loss = self.loss_function(pred_activation, activation, kernel)
@@ -49,10 +48,10 @@ class LISTA(pl.LightningModule):
         non_zero_diff = pred_non_zero - target_non_zero
         return {'loss': loss, 'non zero diff': non_zero_diff / target_non_zero}
 
-    def on_train_epoch_end(self, outputs):
+    def training_epoch_end(self, outputs) -> None:
         self._shared_logging(outputs, 'Training')
 
-    def on_validation_epoch_end(self, outputs):
+    def validation_epoch_end(self, outputs) -> None:
         self._shared_logging(outputs, 'Validation')
 
         # The metric by which we stop has to be logged differently (apparently)
